@@ -1,0 +1,198 @@
+/* ----------------------------- */
+
+
+/* Global Reset & Basic Styling  */
+
+
+/* ----------------------------- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+
+/* ----------------------------- */
+
+
+/* Navbar                        */
+
+
+/* ----------------------------- */
+
+.navbar {
+    /* Semi-transparent gradient background */
+    background: linear-gradient( 90deg, rgba(51, 51, 51, 0.7) 0%, rgba(68, 68, 68, 0.7) 100%);
+    /* If you prefer a solid color instead of a gradient, use:
+       background: rgba(51, 51, 51, 0.7);
+    */
+    /* Blur effect for the background behind it */
+    backdrop-filter: blur(5px);
+    /* Common navbar styling */
+    color: #fff;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar .logo {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-right: auto;
+    text-transform: uppercase;
+    /* optional for a modern look */
+    letter-spacing: 1px;
+    /* optional for more spaced-out text */
+}
+
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.navbar ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+/* ----------------------------- */
+
+
+/* Main Content Container        */
+
+
+/* ----------------------------- */
+
+.container {
+    max-width: 800px;
+    margin: 80px auto 40px;
+    /* Top margin to avoid navbar overlap */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container h2 {
+    margin-bottom: 20px;
+}
+
+
+/* ----------------------------- */
+
+
+/* Form Styles                   */
+
+
+/* ----------------------------- */
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+form label {
+    font-weight: 600;
+}
+
+form input[type="text"],
+form input[type="password"],
+form input[type="number"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    align-self: flex-start;
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #4cae4c;
+}
+
+.error {
+    color: red;
+    margin: 10px 0;
+}
+
+
+/* ----------------------------- */
+
+
+/* Links and Navigation          */
+
+
+/* ----------------------------- */
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #23527c;
+    text-decoration: underline;
+}
+
+
+/* ----------------------------- */
+
+
+/* Result Box for Calculator     */
+
+
+/* ----------------------------- */
+
+#result {
+    margin-top: 20px;
+    background-color: #fafafa;
+    padding: 15px;
+    border-left: 4px solid #5cb85c;
+    border-radius: 4px;
+}
+
+
+/* ----------------------------- */
+
+
+/* Simple Footer                 */
+
+
+/* ----------------------------- */
+
+.footer {
+    text-align: center;
+    margin: 40px auto 20px;
+    color: #777;
+    font-size: 0.9rem;
+}
