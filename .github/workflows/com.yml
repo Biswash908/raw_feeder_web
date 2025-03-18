@@ -19,68 +19,61 @@ jobs:
 
       - name: Randomly Update Files
         run: |
-          # Pick a random file to modify or create a new one
-          FILES=("README.md" "config.json" "docs/setup.txt" "src/settings.py" "CHANGELOG.md" "src/components/ComponentA.js" "docs/CONTRIBUTING.md" "src/utils/helpers.js" "src/styles/global.css" "src/components/NavBar.js" "docs/api.md" "src/utils/logger.js")
+          # List of files to modify or create
+          FILES=("README.md" "config.json" "docs/setup.txt" "src/settings.py" "CHANGELOG.md" 
+                 "src/components/ComponentA.js" "docs/CONTRIBUTING.md" "src/utils/helpers.js" 
+                 "src/styles/global.css" "src/components/NavBar.js" "docs/api.md" "src/utils/logger.js")
+
+          # Pick a random file
           RANDOM_FILE=${FILES[$RANDOM % ${#FILES[@]}]}
 
-          # Make some changes based on the file selected
-          if [[ "$RANDOM_FILE" == "README.md" ]]; then
-            echo "Added new feature details and upcoming roadmap $(date)" >> README.md
-          elif [[ "$RANDOM_FILE" == "config.json" ]]; then
-            echo "{\"feature_flag\": true, \"version\": \"$(date)\"}" > config.json
-          elif [[ "$RANDOM_FILE" == "docs/setup.txt" ]]; then
-            echo "Fixed typos in setup instructions and added troubleshooting steps $(date)" >> docs/setup.txt
-          elif [[ "$RANDOM_FILE" == "src/settings.py" ]]; then
-            echo "# Added new settings to support feature toggle $(date)" >> src/settings.py
-          elif [[ "$RANDOM_FILE" == "CHANGELOG.md" ]]; then
-            echo "- $(date): Updated settings for improved performance in UI" >> CHANGELOG.md
-          elif [[ "$RANDOM_FILE" == "src/components/ComponentA.js" ]]; then
-            echo "// Added event handler for new button click functionality $(date)" >> src/components/ComponentA.js
-          elif [[ "$RANDOM_FILE" == "docs/CONTRIBUTING.md" ]]; then
-            echo "- Updated contribution guidelines for API integration $(date)" >> docs/CONTRIBUTING.md
-          elif [[ "$RANDOM_FILE" == "src/utils/helpers.js" ]]; then
-            echo "// Added utility function for better date formatting $(date)" >> src/utils/helpers.js
-          elif [[ "$RANDOM_FILE" == "src/styles/global.css" ]]; then
-            echo "body { background-color: #f4f4f4; font-family: Arial, sans-serif; } /* Updated for readability $(date) */" >> src/styles/global.css
-          elif [[ "$RANDOM_FILE" == "src/components/NavBar.js" ]]; then
-            echo "// Improved responsiveness for mobile view $(date)" >> src/components/NavBar.js
-          elif [[ "$RANDOM_FILE" == "docs/api.md" ]]; then
-            echo "Added new endpoint details for user authentication $(date)" >> docs/api.md
-          elif [[ "$RANDOM_FILE" == "src/utils/logger.js" ]]; then
-            echo "// Added logging for user authentication process $(date)" >> src/utils/logger.js
-          fi
+          # Ensure the file exists before modifying
+          mkdir -p "$(dirname "$RANDOM_FILE")"  # Create directory if needed
+          touch "$RANDOM_FILE"  # Create the file if it doesn’t exist
+
+          # Append changes to the file
+          case "$RANDOM_FILE" in
+            "README.md") echo "Added new feature details and upcoming roadmap $(date)" >> README.md ;;
+            "config.json") echo "{\"feature_flag\": true, \"version\": \"$(date)\"}" > config.json ;;
+            "docs/setup.txt") echo "Fixed typos in setup instructions $(date)" >> docs/setup.txt ;;
+            "src/settings.py") echo "# Added new settings to support feature toggle $(date)" >> src/settings.py ;;
+            "CHANGELOG.md") echo "- $(date): Updated settings for improved UI performance" >> CHANGELOG.md ;;
+            "src/components/ComponentA.js") echo "// Added event handler $(date)" >> src/components/ComponentA.js ;;
+            "docs/CONTRIBUTING.md") echo "- Updated guidelines for API integration $(date)" >> docs/CONTRIBUTING.md ;;
+            "src/utils/helpers.js") echo "// New utility function $(date)" >> src/utils/helpers.js ;;
+            "src/styles/global.css") echo "body { font-family: Arial; } /* Updated $(date) */" >> src/styles/global.css ;;
+            "src/components/NavBar.js") echo "// Improved mobile responsiveness $(date)" >> src/components/NavBar.js ;;
+            "docs/api.md") echo "Added new authentication endpoint $(date)" >> docs/api.md ;;
+            "src/utils/logger.js") echo "// Improved logging $(date)" >> src/utils/logger.js ;;
+          esac
 
       - name: Generate Dynamic Commit Message
         id: commit_message
         run: |
-          # Create a list of commit messages with variety and context
           COMMIT_MESSAGES=(
-            "Updated feature flags to support new UI component"
-            "Fixed minor typo in setup instructions"
-            "Enhanced user login flow for better error handling"
-            "Improved logging for user interactions"
-            "Refactored global styles for consistency"
-            "Optimized event handler in ComponentA.js"
-            "Fixed broken link in API documentation"
-            "Added new utility function for date manipulation"
-            "Updated changelog with details for version 2.1.0"
-            "Updated NavBar.js to improve mobile responsiveness"
-            "Refactored authentication service for scalability"
-            "Fixed outdated API endpoint in documentation"
-            "Updated build configurations for production optimization"
-            "Refined setup documentation for easier onboarding"
-            "Improved error handling in logger.js"
-            "Fixed UI misalignment on smaller screens"
-            "Enhanced form validation for better user experience"
-            "Updated README with new feature rollout plan"
-            "Improved performance of date parsing function"
-            "Refined global CSS styles for better consistency"
+            "Updated feature flags"
+            "Fixed typo in setup"
+            "Enhanced login flow"
+            "Improved logging"
+            "Refactored styles"
+            "Optimized event handler"
+            "Fixed broken link in docs"
+            "Added new utility function"
+            "Updated changelog"
+            "Improved NavBar responsiveness"
+            "Refactored auth service"
+            "Fixed outdated API reference"
+            "Optimized build settings"
+            "Improved onboarding docs"
+            "Enhanced form validation"
+            "Updated README"
+            "Refined global CSS"
           )
           RANDOM_COMMIT_MESSAGE=${COMMIT_MESSAGES[$RANDOM % ${#COMMIT_MESSAGES[@]}]}
-          echo "::set-output name=message::$RANDOM_COMMIT_MESSAGE"
+          echo "commit_message=$RANDOM_COMMIT_MESSAGE" >> $GITHUB_ENV
 
       - name: Commit changes
         run: |
           git add .
-          git commit -m "${{ steps.commit_message.outputs.message }}"
+          git commit -m "$commit_message"
           git push
