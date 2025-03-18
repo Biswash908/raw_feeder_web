@@ -3,7 +3,6 @@ name: Auto Commit
 on:
   schedule:
      - cron: '* * * * *'  # Runs every minute
-  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   commit:
