@@ -2,7 +2,7 @@ name: Auto Commit
 
 on:
   schedule:
-     - cron: '* * * * *'  # Runs every minute
+    - cron: '0 */12 * * *'  # Runs every 12 hours
 
 jobs:
   commit:
