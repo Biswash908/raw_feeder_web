@@ -10,7 +10,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        with:
+          persist-credentials: false  # Important for manual authentication
 
       - name: Set up Git
         run: |
@@ -19,61 +21,26 @@ jobs:
 
       - name: Randomly Update Files
         run: |
-          # List of files to modify or create
-          FILES=("README.md" "config.json" "docs/setup.txt" "src/settings.py" "CHANGELOG.md" 
-                 "src/components/ComponentA.js" "docs/CONTRIBUTING.md" "src/utils/helpers.js" 
-                 "src/styles/global.css" "src/components/NavBar.js" "docs/api.md" "src/utils/logger.js")
-
-          # Pick a random file
+          FILES=("README.md" "config.json" "docs/setup.txt" "src/settings.py" "CHANGELOG.md")
           RANDOM_FILE=${FILES[$RANDOM % ${#FILES[@]}]}
 
-          # Ensure the file exists before modifying
-          mkdir -p "$(dirname "$RANDOM_FILE")"  # Create directory if needed
-          touch "$RANDOM_FILE"  # Create the file if it doesn’t exist
+          echo "Updating $RANDOM_FILE"
+          echo "Auto update on $(date)" >> $RANDOM_FILE
 
-          # Append changes to the file
-          case "$RANDOM_FILE" in
-            "README.md") echo "Added new feature details and upcoming roadmap $(date)" >> README.md ;;
-            "config.json") echo "{\"feature_flag\": true, \"version\": \"$(date)\"}" > config.json ;;
-            "docs/setup.txt") echo "Fixed typos in setup instructions $(date)" >> docs/setup.txt ;;
-            "src/settings.py") echo "# Added new settings to support feature toggle $(date)" >> src/settings.py ;;
-            "CHANGELOG.md") echo "- $(date): Updated settings for improved UI performance" >> CHANGELOG.md ;;
-            "src/components/ComponentA.js") echo "// Added event handler $(date)" >> src/components/ComponentA.js ;;
-            "docs/CONTRIBUTING.md") echo "- Updated guidelines for API integration $(date)" >> docs/CONTRIBUTING.md ;;
-            "src/utils/helpers.js") echo "// New utility function $(date)" >> src/utils/helpers.js ;;
-            "src/styles/global.css") echo "body { font-family: Arial; } /* Updated $(date) */" >> src/styles/global.css ;;
-            "src/components/NavBar.js") echo "// Improved mobile responsiveness $(date)" >> src/components/NavBar.js ;;
-            "docs/api.md") echo "Added new authentication endpoint $(date)" >> docs/api.md ;;
-            "src/utils/logger.js") echo "// Improved logging $(date)" >> src/utils/logger.js ;;
-          esac
-
-      - name: Generate Dynamic Commit Message
+      - name: Generate Commit Message
         id: commit_message
         run: |
-          COMMIT_MESSAGES=(
-            "Updated feature flags"
-            "Fixed typo in setup"
-            "Enhanced login flow"
-            "Improved logging"
-            "Refactored styles"
-            "Optimized event handler"
-            "Fixed broken link in docs"
-            "Added new utility function"
-            "Updated changelog"
-            "Improved NavBar responsiveness"
-            "Refactored auth service"
-            "Fixed outdated API reference"
-            "Optimized build settings"
-            "Improved onboarding docs"
-            "Enhanced form validation"
-            "Updated README"
-            "Refined global CSS"
-          )
-          RANDOM_COMMIT_MESSAGE=${COMMIT_MESSAGES[$RANDOM % ${#COMMIT_MESSAGES[@]}]}
-          echo "commit_message=$RANDOM_COMMIT_MESSAGE" >> $GITHUB_ENV
+          MESSAGES=("Updated docs" "Refactored settings" "Minor fixes" "Updated changelog" "Tweaked configurations")
+          RANDOM_MESSAGE=${MESSAGES[$RANDOM % ${#MESSAGES[@]}]}
+          echo "message=$RANDOM_MESSAGE" >> $GITHUB_ENV
 
       - name: Commit changes
         run: |
           git add .
-          git commit -m "$commit_message"
-          git push
+          git commit -m "${{ env.message }}" || echo "No changes to commit"
+
+      - name: Push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git HEAD:main || echo "No changes to push"
