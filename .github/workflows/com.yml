@@ -24,7 +24,7 @@ jobs:
           FILES=("README.md" "config.json" "docs/setup.txt" "src/settings.py" "CHANGELOG.md")
           RANDOM_FILE=${FILES[$RANDOM % ${#FILES[@]}]}
           echo "Updating $RANDOM_FILE"
-          echo "Auto update on $(date)" >> $RANDOM_FILE
+          echo "Auto update at $(date) - $RANDOM" >> $RANDOM_FILE
 
       - name: Generate Commit Message  # <-- Fix indentation here
         id: commit_message
